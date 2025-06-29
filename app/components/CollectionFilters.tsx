@@ -47,73 +47,79 @@ function handleApply() {
 }
 
   return (
-    <div className="p-4 border rounded-xl bg-gray-50 w-full max-w-xs space-y-4">
-      <h2 className="text-xl font-semibold">Filters</h2>
+  <div className="p-4 border rounded-xl bg-gray-50 w-full max-w-xs space-y-4">
+    <h2 className="text-xl font-semibold">Filters</h2>
 
-      {/* Price Range */}
-      <div>
-        <label className="block font-medium text-sm mb-1">Price Range</label>
+    {/* Price Range */}
+    <div>
+      <label className="block font-medium text-sm mb-1">Price Range</label>
+      <div className="space-y-2">
+        <div className="flex justify-between text-sm">
+          <span>${localFilters.priceRange.min}</span>
+          <span>${localFilters.priceRange.max}</span>
+        </div>
         <div className="flex items-center space-x-2">
           <input
-            type="number"
-            className="w-20 px-2 py-1 border rounded text-sm"
-            value={localFilters.priceRange.min}
+            type="range"
+            className="flex-1 accent-black"
             min={minPrice}
             max={localFilters.priceRange.max}
+            value={localFilters.priceRange.min}
             onChange={(e) =>
               setLocalFilters((prev) => ({
                 ...prev,
                 priceRange: {
                   ...prev.priceRange,
-                  min: parseFloat(e.target.value),
+                  min: Math.min(parseFloat(e.target.value), prev.priceRange.max),
                 },
               }))
             }
           />
-          <span>–</span>
           <input
-            type="number"
-            className="w-20 px-2 py-1 border rounded text-sm"
-            value={localFilters.priceRange.max}
+            type="range"
+            className="flex-1 accent-black"
             min={localFilters.priceRange.min}
             max={maxPrice}
+            value={localFilters.priceRange.max}
             onChange={(e) =>
               setLocalFilters((prev) => ({
                 ...prev,
                 priceRange: {
                   ...prev.priceRange,
-                  max: parseFloat(e.target.value),
+                  max: Math.max(parseFloat(e.target.value), prev.priceRange.min),
                 },
               }))
             }
           />
         </div>
       </div>
-
-      {/* Availability */}
-      <div>
-        <label className="inline-flex items-center space-x-2">
-          <input
-            type="checkbox"
-            className="form-checkbox"
-            checked={localFilters.availability === true}
-            onChange={(e) =>
-              setLocalFilters((prev) => ({
-                ...prev,
-                availability: e.target.checked ? true : null,
-              }))
-            }
-          />
-          <span className="text-sm">In stock only</span>
-        </label>
-      </div>
-
-      <button
-        onClick={handleApply}
-        className="w-full bg-black text-white py-2 rounded hover:bg-gray-800 transition"
-      >
-        Apply Filters
-      </button>
     </div>
-  );
+
+    {/* Availability */}
+    <div>
+      <label className="inline-flex items-center space-x-2">
+        <input
+          type="checkbox"
+          className="form-checkbox"
+          checked={localFilters.availability === true}
+          onChange={(e) =>
+            setLocalFilters((prev) => ({
+              ...prev,
+              availability: e.target.checked ? true : null,
+            }))
+          }
+        />
+        <span className="text-sm">In stock only</span>
+      </label>
+    </div>
+
+    <button
+      onClick={handleApply}
+      className="w-full bg-black text-white py-2 rounded hover:bg-gray-800 transition"
+    >
+      Apply Filters
+    </button>
+  </div>
+);
+
 }
